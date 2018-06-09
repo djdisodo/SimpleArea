@@ -2,10 +2,10 @@
 
 namespace ifteam\SimpleArea\task;
 
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 use ifteam\SimpleArea\SimpleArea;
 
-class AutoSaveTask extends PluginTask {
+class AutoSaveTask extends Task {
 	public function __construct(SimpleArea $owner) {
 		parent::__construct ( $owner );
 	}
