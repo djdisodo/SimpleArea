@@ -418,16 +418,16 @@ class UserProperties implements Listener {
 		}
 	}
 	public function onRentAddEvent(RentAddEvent $event) {
-		$this->server->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
+		$this->simpleArea->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
 	}
 	public function onRentDeleteEvent(RentDeleteEvent $event) {
-		$this->server->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
+		$this->simpleArea->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
 	}
 	public function onRentBuyEvent(RentBuyEvent $event) {
-		$this->server->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
+		$this->simpleArea->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
 	}
 	public function onRentOutEvent(RentOutEvent $event) {
-		$this->server->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
+		$this->simpleArea->getScheduler ()->scheduleDelayedTask ( new CheckRentEventTask ( $this, $event ), 1 );
 	}
 	/**
 	 *
