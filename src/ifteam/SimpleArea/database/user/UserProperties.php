@@ -57,7 +57,7 @@ class UserProperties implements Listener {
 		$this->areaProvider = AreaProvider::getInstance ();
 		$this->rentProvider = RentProvider::getInstance ();
 		$this->whiteWorldProvider = WhiteWorldProvider::getInstance ();
-		$this->simpleArea = $this->server->getPluginManager()->getPlugin("SimpleArea")
+		$this->simpleArea = $this->server->getPluginManager()->getPlugin("SimpleArea");
 		$this->init ();
 		
 	}
