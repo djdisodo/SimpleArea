@@ -4,6 +4,9 @@ version: 2.0.1
 author: ifteam
 api: 3.0.0-ALPHA12
 permissions:
+  simplearea.modallarea:
+    description: Allows to change blocks in all areas
+    default: op
   simplearea.area:
     description: Allows to control area
     default: true
