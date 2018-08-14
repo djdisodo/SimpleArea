@@ -12,6 +12,7 @@ use pocketmine\Server;
 use pocketmine\block\Block;
 use pocketmine\block\Sapling;
 use pocketmine\level\generator\Generator;
+use pocketmine\level\generator\GeneratorManager;
 use pocketmine\level\generator\object\Tree;
 use pocketmine\utils\Random;
 
@@ -46,7 +47,7 @@ class MineFarmLoader {
 		$this->server = Server::getInstance ();
 	}
 	public function createWorld() {
-		$generator = Generator::getGenerator ( "flat" );
+		$generator = GeneratorManager::getGenerator ( "flat" );
 		$bool = $this->server->generateLevel ( "island", null, $generator, [ 
 				"preset" => "2;0;1" 
 		] );
