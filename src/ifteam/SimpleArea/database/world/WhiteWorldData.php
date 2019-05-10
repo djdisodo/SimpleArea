@@ -5,53 +5,55 @@ namespace ifteam\SimpleArea\database\world;
 use ifteam\SimpleArea\event\AreaTaxChangeEvent;
 use pocketmine\Server;
 
-class WhiteWorldData {
-	private $data = [ ];
+class WhiteWorldData
+{
+	private $data = [];
 	private $level;
+
 	public function __construct(array &$data, $level) {
-		if (! isset ( $data ["protect"] ))
+		if (!isset ($data ["protect"]))
 			$data ["protect"] = true;
-		if (! isset ( $data ["defaultAreaPrice"] ))
+		if (!isset ($data ["defaultAreaPrice"]))
 			$data ["defaultAreaPrice"] = 5000;
-		if (! isset ( $data ["areaTax"] ))
+		if (!isset ($data ["areaTax"]))
 			$data ["areaTax"] = 0;
-		if (! isset ( $data ["pricePerBlock"] ))
+		if (!isset ($data ["pricePerBlock"]))
 			$data ["pricePerBlock"] = 10;
-		if (! isset ( $data ["welcome"] ))
+		if (!isset ($data ["welcome"]))
 			$data ["welcome"] = "";
-		if (! isset ( $data ["pvpAllow"] ))
+		if (!isset ($data ["pvpAllow"]))
 			$data ["pvpAllow"] = true;
-		if (! isset ( $data ["invenSave"] ))
+		if (!isset ($data ["invenSave"]))
 			$data ["invenSave"] = true;
-		if (! isset ( $data ["autoCreateAllow"] ))
+		if (!isset ($data ["autoCreateAllow"]))
 			$data ["autoCreateAllow"] = true;
-		if (! isset ( $data ["manualCreateAllow"] ))
+		if (!isset ($data ["manualCreateAllow"]))
 			$data ["manualCreateAllow"] = true;
-		if (! isset ( $data ["areaHoldLimit"] ))
+		if (!isset ($data ["areaHoldLimit"]))
 			$data ["areaHoldLimit"] = true;
-		if (! isset ( $data ["defaultAreaSize"] ))
-			$data ["defaultAreaSize"] = [ 
-					32,
-					22 
+		if (!isset ($data ["defaultAreaSize"]))
+			$data ["defaultAreaSize"] = [
+				32,
+				22
 			];
-		if (! isset ( $data ["defaultFenceType"] ))
-			$data ["defaultFenceType"] = [ 
-					139,
-					1 
+		if (!isset ($data ["defaultFenceType"]))
+			$data ["defaultFenceType"] = [
+				139,
+				1
 			];
-		if (! isset ( $data ["isAllowAccessDeny"] ))
+		if (!isset ($data ["isAllowAccessDeny"]))
 			$data ["isAllowAccessDeny"] = true;
-		if (! isset ( $data ["isAllowAreaSizeUp"] ))
+		if (!isset ($data ["isAllowAreaSizeUp"]))
 			$data ["isAllowAreaSizeUp"] = false;
-		if (! isset ( $data ["isAllowAreaSizeDown"] ))
+		if (!isset ($data ["isAllowAreaSizeDown"]))
 			$data ["isAllowAreaSizeDown"] = false;
-		if (! isset ( $data ["isCountShareArea"] ))
+		if (!isset ($data ["isCountShareArea"]))
 			$data ["isCountShareArea"] = false;
-		if (! isset ( $data ["manualCreateMaxSize"] ))
+		if (!isset ($data ["manualCreateMaxSize"]))
 			$data ["manualCreateMaxSize"] = 200;
-		if (! isset ( $data ["manualCreateMinSize"] ))
+		if (!isset ($data ["manualCreateMinSize"]))
 			$data ["manualCreateMixSize"] = 20;
-		
+
 		$this->level = $level;
 		$this->data = &$data;
 	}
@@ -93,11 +95,11 @@ class WhiteWorldData {
 	}
 
 	public function isAllowOption($blockId, $blockDamage = 0) {
-		return isset ( $this->data ["allowOption"] ["{$blockId}:{$blockDamage}"] ) ? true : false;
+		return isset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"]) ? true : false;
 	}
 
 	public function isForbidOption($blockId, $blockDamage = 0) {
-		return isset ( $this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"] ) ? true : false;
+		return isset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"]) ? true : false;
 	}
 
 	public function isPvpAllow() {
@@ -139,36 +141,36 @@ class WhiteWorldData {
 	public function setAllowOption($bool, $blockId, $blockDamage) {
 		if ($bool) {
 			if ($blockDamage === "*") {
-				for($dmg = 0; $dmg <= 15; $dmg ++)
+				for ($dmg = 0; $dmg <= 15; $dmg++)
 					$this->data ["allowOption"] ["{$blockId}:{$dmg}"] = true;
 				return;
 			}
 			$this->data ["allowOption"] ["{$blockId}:{$blockDamage}"] = true;
 		} else if ($blockDamage === "*") {
-			for($dmg = 0; $dmg <= 15; $dmg ++)
-				if (isset ( $this->data ["allowOption"] ["{$blockId}:{$dmg}"] ))
-					unset ( $this->data ["allowOption"] ["{$blockId}:{$dmg}"] );
+			for ($dmg = 0; $dmg <= 15; $dmg++)
+				if (isset ($this->data ["allowOption"] ["{$blockId}:{$dmg}"]))
+					unset ($this->data ["allowOption"] ["{$blockId}:{$dmg}"]);
 			return;
-		} else if (isset ( $this->data ["allowOption"] ["{$blockId}:{$blockDamage}"] )) {
-			unset ( $this->data ["allowOption"] ["{$blockId}:{$blockDamage}"] );
+		} else if (isset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"])) {
+			unset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"]);
 		}
 	}
 
 	public function setForbidOption($bool, $blockId, $blockDamage) {
 		if ($bool) {
 			if ($blockDamage === "*") {
-				for($dmg = 0; $dmg <= 15; $dmg ++)
+				for ($dmg = 0; $dmg <= 15; $dmg++)
 					$this->data ["forbidOption"] ["{$blockId}:{$dmg}"] = true;
 				return;
 			}
 			$this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"] = true;
 		} else if ($blockDamage === "*") {
-			for($dmg = 0; $dmg <= 15; $dmg ++)
-				if (isset ( $this->data ["forbidOption"] ["{$blockId}:{$dmg}"] ))
-					unset ( $this->data ["forbidOption"] ["{$blockId}:{$dmg}"] );
+			for ($dmg = 0; $dmg <= 15; $dmg++)
+				if (isset ($this->data ["forbidOption"] ["{$blockId}:{$dmg}"]))
+					unset ($this->data ["forbidOption"] ["{$blockId}:{$dmg}"]);
 			return;
-		} else if (isset ( $this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"] )) {
-			unset ( $this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"] );
+		} else if (isset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"])) {
+			unset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"]);
 		}
 	}
 
@@ -201,9 +203,9 @@ class WhiteWorldData {
 	}
 
 	public function setDefaultAreaSize($x, $z) {
-		$this->data ["defaultAreaSize"] = [ 
-				$x,
-				$z 
+		$this->data ["defaultAreaSize"] = [
+			$x,
+			$z
 		];
 	}
 
@@ -212,17 +214,17 @@ class WhiteWorldData {
 	}
 
 	public function setDefaultFence($id, $damage) {
-		$this->data ["defaultFenceType"] = [ 
-				$id,
-				$damage 
+		$this->data ["defaultFenceType"] = [
+			$id,
+			$damage
 		];
 	}
 
 	public function setAreaTax($price) {
-		$event = new AreaTaxChangeEvent ( $this->level, $price );
-		Server::getInstance ()->getPluginManager ()->callEvent ( $event );
-		if (! $event->isCancelled ())
-			$this->data ["areaTax"] = $event->getPrice ();
+		$event = new AreaTaxChangeEvent ($this->level, $price);
+		Server::getInstance()->getPluginManager()->callEvent($event);
+		if (!$event->isCancelled())
+			$this->data ["areaTax"] = $event->getPrice();
 	}
 
 	public function setAllowAccessDeny($bool) {

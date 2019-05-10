@@ -7,19 +7,21 @@ use pocketmine\event\Cancellable;
 use ifteam\SimpleArea\database\area\AreaProvider;
 use ifteam\SimpleArea\database\area\AreaSection;
 
-class AreaBuyEvent extends Event implements Cancellable {
+class AreaBuyEvent extends Event implements Cancellable
+{
 	public static $handlerList = null;
-	public static $eventPool = [ ];
+	public static $eventPool = [];
 	public static $nextEvent = 0;
 	protected $player, $level, $id;
 	protected $buyer;
+
 	/**
 	 * __construct()
 	 *
-	 * @param string $player        	
-	 * @param string $level        	
-	 * @param string $id        	
-	 * @param string $buyer        	
+	 * @param string $player
+	 * @param string $level
+	 * @param string $id
+	 * @param string $buyer
 	 */
 	public function __construct($player, $level, $id, $buyer) {
 		$this->player = $player;
@@ -27,9 +29,11 @@ class AreaBuyEvent extends Event implements Cancellable {
 		$this->id = $id;
 		$this->buyer = $buyer;
 	}
+
 	public function getBuyer() {
 		return $this->buyer;
 	}
+
 	/**
 	 * getPlayer()
 	 *
@@ -38,6 +42,7 @@ class AreaBuyEvent extends Event implements Cancellable {
 	public function getPlayer() {
 		return $this->player;
 	}
+
 	/**
 	 * getAreaId()
 	 *
@@ -46,13 +51,14 @@ class AreaBuyEvent extends Event implements Cancellable {
 	public function getAreaId() {
 		return $this->id;
 	}
+
 	/**
 	 * getAreaData()
 	 *
 	 * @return AreaSection $area
 	 */
 	public function getAreaData() {
-		return AreaProvider::getInstance ()->getAreaToId ( $this->level, $this->id );
+		return AreaProvider::getInstance()->getAreaToId($this->level, $this->id);
 	}
 }
 

@@ -7,18 +7,20 @@ use pocketmine\event\Event;
 use pocketmine\event\Cancellable;
 use ifteam\SimpleArea\database\area\AreaSection;
 
-class AreaResidentEvent extends Event implements Cancellable {
+class AreaResidentEvent extends Event implements Cancellable
+{
 	public static $handlerList = null;
-	public static $eventPool = [ ];
+	public static $eventPool = [];
 	public static $nextEvent = 0;
 	protected $player, $level, $id;
-	private $added = [ ];
-	private $deleted = [ ];
+	private $added = [];
+	private $deleted = [];
+
 	/**
 	 *
-	 * @param Player $player        	
-	 * @param Level $level        	
-	 * @param string $id        	
+	 * @param Player $player
+	 * @param Level $level
+	 * @param string $id
 	 */
 	public function __construct($player, $level, $id, $added = [], $deleted = []) {
 		$this->player = $player;
@@ -27,6 +29,7 @@ class AreaResidentEvent extends Event implements Cancellable {
 		$this->added = $added;
 		$this->deleted = $deleted;
 	}
+
 	/**
 	 * getPlayer()
 	 *
@@ -35,6 +38,7 @@ class AreaResidentEvent extends Event implements Cancellable {
 	public function getPlayer() {
 		return $this->player;
 	}
+
 	/**
 	 * getAreaId()
 	 *
@@ -43,14 +47,16 @@ class AreaResidentEvent extends Event implements Cancellable {
 	public function getAreaId() {
 		return $this->id;
 	}
+
 	/**
 	 * getAreaData()
 	 *
 	 * @return AreaSection $area
 	 */
 	public function getAreaData() {
-		return AreaProvider::getInstance ()->getAreaToId ( $this->level, $this->id );
+		return AreaProvider::getInstance()->getAreaToId($this->level, $this->id);
 	}
+
 	/**
 	 *
 	 * @return array
@@ -58,6 +64,7 @@ class AreaResidentEvent extends Event implements Cancellable {
 	public function getAdded() {
 		return $this->added;
 	}
+
 	/**
 	 *
 	 * @return array

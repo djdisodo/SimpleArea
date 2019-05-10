@@ -9,23 +9,26 @@ use ifteam\SimpleArea\database\area\AreaSection;
 use ifteam\SimpleArea\database\world\WhiteWorldProvider;
 use ifteam\SimpleArea\database\world\WhiteWorldData;
 
-class AreaAddEvent extends Event implements Cancellable {
+class AreaAddEvent extends Event implements Cancellable
+{
 	public static $handlerList = null;
-	public static $eventPool = [ ];
+	public static $eventPool = [];
 	public static $nextEvent = 0;
 	protected $player, $level, $id;
+
 	/**
 	 * __construct()
 	 *
-	 * @param string $player        	
-	 * @param string $level        	
-	 * @param string $id        	
+	 * @param string $player
+	 * @param string $level
+	 * @param string $id
 	 */
 	public function __construct($player, $level, $id) {
 		$this->player = $player;
 		$this->level = $level;
 		$this->id = $id;
 	}
+
 	/**
 	 * getPlayer()
 	 *
@@ -34,6 +37,7 @@ class AreaAddEvent extends Event implements Cancellable {
 	public function getPlayer() {
 		return $this->player;
 	}
+
 	/**
 	 * getAreaId()
 	 *
@@ -42,21 +46,24 @@ class AreaAddEvent extends Event implements Cancellable {
 	public function getAreaId() {
 		return $this->id;
 	}
+
 	/**
 	 * getAreaData()
 	 *
 	 * @return AreaSection $area
 	 */
 	public function getAreaData() {
-		return AreaProvider::getInstance ()->getAreaToId ( $this->level, $this->id );
+		return AreaProvider::getInstance()->getAreaToId($this->level, $this->id);
 	}
+
 	/**
 	 * getWhtieWorldData()
 	 *
 	 * @return WhiteWorldData $area
 	 */
 	public function getWhtieWorldData() {
-		return WhiteWorldProvider::getInstance ()->get ( $this->level );
+		return WhiteWorldProvider::getInstance()->get($this->level);
 	}
 }
+
 ?>

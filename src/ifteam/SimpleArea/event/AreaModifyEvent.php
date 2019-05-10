@@ -8,9 +8,10 @@ use pocketmine\event\Cancellable;
 use ifteam\SimpleArea\database\area\AreaProvider;
 use ifteam\SimpleArea\database\area\AreaSection;
 
-class AreaModifyEvent extends Event implements Cancellable {
+class AreaModifyEvent extends Event implements Cancellable
+{
 	public static $handlerList = null;
-	public static $eventPool = [ ];
+	public static $eventPool = [];
 	public static $nextEvent = 0;
 	protected $player, $level, $id;
 	private $block, $type;
@@ -31,13 +32,14 @@ class AreaModifyEvent extends Event implements Cancellable {
 	const SIGN_CHANGE_FORBID = 9;
 	const SIGN_CHANGE_WHITE = 10;
 	const SIGN_CHANGE_WHITE_FORBID = 11;
+
 	/**
 	 *
-	 * @param string $player        	
-	 * @param string $level        	
-	 * @param int $id        	
-	 * @param Block $block        	
-	 * @param int $type        	
+	 * @param string $player
+	 * @param string $level
+	 * @param int $id
+	 * @param Block $block
+	 * @param int $type
 	 */
 	public function __construct($player, $level, $id, Block $block, $type) {
 		$this->player = $player;
@@ -46,12 +48,15 @@ class AreaModifyEvent extends Event implements Cancellable {
 		$this->block = $block;
 		$this->type = $type;
 	}
+
 	public function getBlock() {
 		return $this->block;
 	}
+
 	public function getType() {
 		return $this->type;
 	}
+
 	/**
 	 * getPlayer()
 	 *
@@ -60,6 +65,7 @@ class AreaModifyEvent extends Event implements Cancellable {
 	public function getPlayer() {
 		return $this->player;
 	}
+
 	/**
 	 * getAreaId()
 	 *
@@ -68,13 +74,15 @@ class AreaModifyEvent extends Event implements Cancellable {
 	public function getAreaId() {
 		return $this->id;
 	}
+
 	/**
 	 * getAreaData()
 	 *
 	 * @return AreaSection $area
 	 */
 	public function getAreaData() {
-		return AreaProvider::getInstance ()->getAreaToId ( $this->level, $this->id );
+		return AreaProvider::getInstance()->getAreaToId($this->level, $this->id);
 	}
 }
+
 ?>
