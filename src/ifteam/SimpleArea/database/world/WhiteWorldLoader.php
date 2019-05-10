@@ -13,8 +13,9 @@ class WhiteWorldLoader
 	private static $instance = null;
 
 	public function __construct() {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->init();
 	}
 
@@ -25,8 +26,9 @@ class WhiteWorldLoader
 		if ($levelName !== null) {
 			$level = Server::getInstance()->getLevelByName($levelName);
 			$filePath = Server::getInstance()->getDataPath() . "worlds/" . $level->getFolderName() . "/options.json";
-			if (isset ($this->jsons [$level->getFolderName()]))
+			if (isset ($this->jsons [$level->getFolderName()])) {
 				return;
+			}
 			$this->jsons [$level->getFolderName()] = (new Config ($filePath, Config::JSON, [
 				"protect" => false,
 				"defaultAreaPrice" => 5000,
@@ -51,11 +53,13 @@ class WhiteWorldLoader
 			return;
 		}
 		foreach (Server::getInstance()->getLevels() as $level) {
-			if (!$level instanceof Level)
+			if (!$level instanceof Level) {
 				continue;
+			}
 			$filePath = Server::getInstance()->getDataPath() . "worlds/" . $level->getFolderName() . "/options.json";
-			if (isset ($this->jsons [$level->getFolderName()]))
+			if (isset ($this->jsons [$level->getFolderName()])) {
 				continue;
+			}
 			$this->jsons [$level->getFolderName()] = (new Config ($filePath, Config::JSON, [
 				"protect" => false,
 				"defaultAreaPrice" => 5000,
@@ -87,8 +91,9 @@ class WhiteWorldLoader
 	 * @return NULL|AreaSection
 	 */
 	public function getAll($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->jsons [$level])) {
 			return $this->jsons [$level];
 		} else {
@@ -103,8 +108,9 @@ class WhiteWorldLoader
 	 * @return WhiteWorldData $data | null
 	 */
 	public function getWhiteWorldData($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->whiteWorlds [$level])) {
 			return $this->whiteWorlds [$level];
 		} else {

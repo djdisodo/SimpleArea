@@ -17,8 +17,9 @@ class RentProvider
 	private $rentLoader;
 
 	public function __construct() {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->rentLoader = new RentLoader ();
 	}
 
@@ -37,8 +38,9 @@ class RentProvider
 	 * @return RentSection|NULL
 	 */
 	public function addRent($level, $startX, $endX, $startY, $endY, $startZ, $endZ, $areaId, $price) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 
 		if ($startX > $endX) {
 			$backup = $startX;
@@ -69,8 +71,9 @@ class RentProvider
 		];
 
 		$rent = $this->rentLoader->addRentSection($level, $data);
-		if (!$rent instanceof RentSection)
+		if (!$rent instanceof RentSection) {
 			return null;
+		}
 
 		$event = new RentAddEvent ($rent->getOwner(), $rent->getLevel(), $rent->getRentId());
 		Server::getInstance()->getPluginManager()->callEvent($event);
@@ -88,13 +91,15 @@ class RentProvider
 	 * @param string $id
 	 */
 	public function deleteRent($level, $id) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		$rent = $this->getRentToId($level, $id);
 		$event = new RentDeleteEvent ($rent->getOwner(), $rent->getLevel(), $rent->getRentId());
 		Server::getInstance()->getPluginManager()->callEvent($event);
-		if ($event->isCancelled())
+		if ($event->isCancelled()) {
 			return;
+		}
 		$this->rentLoader->deleteRentSection($level, $id);
 	}
 
@@ -105,8 +110,9 @@ class RentProvider
 	 * @return array $rents
 	 */
 	public function getAll($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		return $this->rentLoader->getAll($level);
 	}
 
@@ -117,8 +123,9 @@ class RentProvider
 	 * @return NULL|Array
 	 */
 	public function getRentsInfo($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		return $this->rentLoader->getRentsInfo($level);
 	}
 
@@ -132,8 +139,9 @@ class RentProvider
 	 * @return RentSection|NULL
 	 */
 	public function getRent($level, $x, $y, $z) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		return $this->rentLoader->getRent($level, $x, $y, $z);
 	}
 
@@ -145,8 +153,9 @@ class RentProvider
 	 * @return RentSection|NULL
 	 */
 	public function getRentToId($level, $id) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		return $this->rentLoader->getRentSection($level, $id);
 	}
 
@@ -163,8 +172,9 @@ class RentProvider
 	 * @return RentSection|NULL
 	 */
 	public function checkOverlap($level, $startX, $endX, $startY, $endY, $startZ, $endZ) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		return $this->rentLoader->checkOverlap($level, $startX, $endX, $startY, $endY, $startZ, $endZ);
 	}
 
@@ -174,8 +184,9 @@ class RentProvider
 	 * @param string $bool
 	 */
 	public function save($bool = false) {
-		if ($this->rentLoader instanceof RentLoader)
+		if ($this->rentLoader instanceof RentLoader) {
 			$this->rentLoader->save($bool);
+		}
 	}
 
 	/**

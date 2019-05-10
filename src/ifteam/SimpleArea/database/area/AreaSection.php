@@ -28,30 +28,40 @@ class AreaSection
 			"endZ"
 		];
 		foreach ($basicElements as $element)
-			if (!isset ($data [$element]))
+			if (!isset ($data [$element])) {
 				return null;
+			}
 
 		$whiteWorld = WhiteWorldProvider::getInstance()->get($level);
 
-		if (!isset ($data ["protect"]))
+		if (!isset ($data ["protect"])) {
 			$data ["protect"] = true;
-		if (!isset ($data ["allowOption"]))
+		}
+		if (!isset ($data ["allowOption"])) {
 			$data ["allowOption"] = [];
-		if (!isset ($data ["forbidOption"]))
+		}
+		if (!isset ($data ["forbidOption"])) {
 			$data ["forbidOption"] = [];
-		if (!isset ($data ["areaPrice"]))
+		}
+		if (!isset ($data ["areaPrice"])) {
 			$data ["areaPrice"] = $whiteWorld->getDefaultAreaPrice();
-		if (!isset ($data ["welcome"]))
+		}
+		if (!isset ($data ["welcome"])) {
 			$data ["welcome"] = "";
-		if (!isset ($data ["pvpAllow"]))
+		}
+		if (!isset ($data ["pvpAllow"])) {
 			$data ["pvpAllow"] = $whiteWorld->isPvpAllow();
-		if (!isset ($data ["invenSave"]))
+		}
+		if (!isset ($data ["invenSave"])) {
 			$data ["invenSave"] = $whiteWorld->isInvenSave();
-		if (!isset ($data ["accessDeny"]))
+		}
+		if (!isset ($data ["accessDeny"])) {
 			$data ["accessDeny"] = false;
+		}
 
-		if ($data ["owner"] !== "")
+		if ($data ["owner"] !== "") {
 			$data ["owner"] = strtolower($data ["owner"]);
+		}
 
 		$lowerResident = [];
 		foreach ($data ["resident"] as $resident => $bool)
@@ -68,13 +78,15 @@ class AreaSection
 	 * @param string $player
 	 */
 	public function sell($player = null) {
-		if ($player instanceof Player)
+		if ($player instanceof Player) {
 			$player = $player->getName();
+		}
 		$player = strtolower($player);
 		$event = new AreaSellEvent ($this->getOwner(), $this->getLevel(), $this->getId(), $player);
 		Server::getInstance()->getPluginManager()->callEvent($event);
-		if (!$event->isCancelled())
+		if (!$event->isCancelled()) {
 			$this->setOwner($player);
+		}
 	}
 
 	/**
@@ -83,32 +95,37 @@ class AreaSection
 	 * @param string $player
 	 */
 	public function buy($player) {
-		if ($player instanceof Player)
+		if ($player instanceof Player) {
 			$player = $player->getName();
+		}
 		$player = strtolower($player);
 		$event = new AreaBuyEvent ($this->getOwner(), $this->getLevel(), $this->getId(), $player);
 		Server::getInstance()->getPluginManager()->callEvent($event);
-		if (!$event->isCancelled())
+		if (!$event->isCancelled()) {
 			$this->setOwner($player);
+		}
 	}
 
 
 	public function changeResident($add = [], $delete = []) {
 		$ReaffirmedAdd = [];
 		foreach ($add as $player) {
-			if ($player instanceof Player)
+			if ($player instanceof Player) {
 				$player = $player->getName();
+			}
 			$player = strtolower($player);
 			$ReaffirmedAdd [] = $player;
 		}
 
 		$ReaffirmedDelete = [];
 		foreach ($delete as $player) {
-			if ($player instanceof Player)
+			if ($player instanceof Player) {
 				$player = $player->getName();
+			}
 			$player = strtolower($player);
-			if (isset ($this->data ["resident"] [$player]))
+			if (isset ($this->data ["resident"] [$player])) {
 				$ReaffirmedDelete [] = $player;
+			}
 		}
 
 		$event = new AreaResidentEvent ($this->getOwner(), $this->getLevel(), $this->getId(), $ReaffirmedAdd, $ReaffirmedDelete);
@@ -116,25 +133,29 @@ class AreaSection
 
 		if (!$event->isCancelled()) {
 			foreach ($ReaffirmedAdd as $player) {
-				if ($player instanceof Player)
+				if ($player instanceof Player) {
 					$player = $player->getName();
+				}
 				$player = strtolower($player);
 				$this->data ["resident"] [$player] = true;
 			}
 			foreach ($ReaffirmedDelete as $player) {
-				if ($player instanceof Player)
+				if ($player instanceof Player) {
 					$player = $player->getName();
+				}
 				$player = strtolower($player);
-				if (isset ($this->data ["resident"] [$player]))
+				if (isset ($this->data ["resident"] [$player])) {
 					unset ($this->data ["resident"] [$player]);
+				}
 			}
 		}
 	}
 
 
 	public function get($key) {
-		if (!isset ($this->data [$key]))
+		if (!isset ($this->data [$key])) {
 			return null;
+		}
 		return $this->data [$key];
 	}
 
@@ -205,31 +226,35 @@ class AreaSection
 
 
 	public function isResident($name) {
-		if ($name instanceof Player)
+		if ($name instanceof Player) {
 			$name = $name->getName();
+		}
 		$name = strtolower($name);
 		return isset ($this->data ["resident"] [strtolower($name)]) ? true : false;
 	}
 
 
 	public function isOwner($name) {
-		if ($name instanceof Player)
+		if ($name instanceof Player) {
 			$name = $name->getName();
+		}
 		$name = strtolower($name);
 		return $this->data ["owner"] == strtolower($name) ? true : false;
 	}
 
 
 	public function isCanBuy() {
-		if (!$this->isHome())
+		if (!$this->isHome()) {
 			return false;
+		}
 		return $this->data ["owner"] == "" ? true : false;
 	}
 
 
 	public function isAccessDeny() {
-		if ($this->isCanBuy())
+		if ($this->isCanBuy()) {
 			return false;
+		}
 		return $this->data ["accessDeny"];
 	}
 
@@ -255,8 +280,9 @@ class AreaSection
 
 
 	public function setResident($bool, $name) {
-		if ($name instanceof Player)
+		if ($name instanceof Player) {
 			$name = $name->getName();
+		}
 		$name = strtolower($name);
 		if ($bool) {
 			$this->changeResident([
@@ -275,14 +301,17 @@ class AreaSection
 
 
 	public function setOwner($name) {
-		if ($name instanceof Player)
+		if ($name instanceof Player) {
 			$name = $name->getName();
+		}
 		$name = strtolower($name);
-		if ($this->data ["owner"] != "")
+		if ($this->data ["owner"] != "") {
 			$this->setResident(false, $this->data ["owner"]);
+		}
 		$this->data ["owner"] = strtolower($name);
-		if ($name != "")
+		if ($name != "") {
 			$this->setResident(true, $name);
+		}
 	}
 
 
@@ -479,23 +508,28 @@ class AreaSection
 		$blockId = $level->getBlockIdAt($x, $y, $z);
 		$blockDmg = $level->getBlockDataAt($x, $y, $z);
 
-		if ($blockId == $fenceId and $blockDmg == $fenceDamange)
+		if ($blockId == $fenceId and $blockDmg == $fenceDamange) {
 			return;
+		}
 
 		if ($blockId != 0) {
 			$y++;
-			if ($blockId == Block::SIGN_POST)
+			if ($blockId == Block::SIGN_POST) {
 				return;
+			}
 			$block = Block::get($blockId, $blockDmg);
 			if ($block->canBeReplaced()) {
 				$y--;
-			} else if (!$block->isSolid()) {
-				$y--;
+			} else {
+				if (!$block->isSolid()) {
+					$y--;
+				}
 			}
 		}
 
-		if (!isset ($this->data ["fencePos"] ["{$x}:{$y}:{$z}"]))
+		if (!isset ($this->data ["fencePos"] ["{$x}:{$y}:{$z}"])) {
 			$this->data ["fencePos"] ["{$x}:{$y}:{$z}"] = "{$fenceId}:{$fenceDamange}";
+		}
 
 		$level->setBlock(new Vector3 ($x, $y, $z), Block::get($fenceId, $fenceDamange));
 	}
@@ -511,8 +545,9 @@ class AreaSection
 		$level = Server::getInstance()->getLevelByName($this->level);
 		$y = $level->getHighestBlockAt($x, $z);
 
-		if ($level->getBlockIdAt($x, $y, $z) == $fenceId and $level->getBlockDataAt($x, $y, $z) == $fenceDamange)
+		if ($level->getBlockIdAt($x, $y, $z) == $fenceId and $level->getBlockDataAt($x, $y, $z) == $fenceDamange) {
 			$level->setBlock(new Vector3 ($x, $y, $z), Block::get(Block::AIR));
+		}
 	}
 
 }

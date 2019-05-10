@@ -2,6 +2,7 @@
 
 namespace ifteam\SimpleArea\database\minefarm;
 
+use onebone\economyapi\EconomyAPI;
 use pocketmine\command\CommandSender;
 use pocketmine\Server;
 use pocketmine\level\Level;
@@ -36,7 +37,7 @@ class MineFarmManager
 	private $whiteWorldProvider;
 	/**
 	 *
-	 * @var \onebone\economyapi\EconomyAPI
+	 * @var EconomyAPI
 	 */
 	private $economy;
 	/**
@@ -51,8 +52,9 @@ class MineFarmManager
 	private $properties;
 
 	public function __construct(SimpleArea $plugin) {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->plugin = $plugin;
 		$this->mineFarmLoader = new MineFarmLoader ($plugin);
 		$this->areaProvider = AreaProvider::getInstance();
@@ -150,8 +152,9 @@ class MineFarmManager
 		$area = $this->areaProvider->getAreaToId("island", $target);
 		if (!$area instanceof AreaSection) {
 			$this->alert($player, $this->get("minefarm-farm-not-exist"));
-			if ($player->isOp())
+			if ($player->isOp()) {
 				$this->message($player, $this->get("minefarm-can-create-minefarm"));
+			}
 			return false;
 		}
 		$areaCenter = $area->getCenter();

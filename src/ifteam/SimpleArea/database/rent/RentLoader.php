@@ -13,8 +13,9 @@ class RentLoader
 	private static $instance = null;
 
 	public function __construct() {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->init();
 	}
 
@@ -24,22 +25,26 @@ class RentLoader
 	public function init($levelName = null) {
 		if ($levelName !== null) {
 			$level = Server::getInstance()->getLevelByName($levelName);
-			if (!$level instanceof Level)
+			if (!$level instanceof Level) {
 				return;
+			}
 			$filePath = Server::getInstance()->getDataPath() . "worlds/" . $level->getFolderName() . "/rents.json";
-			if (isset ($this->jsons [$level->getFolderName()]))
+			if (isset ($this->jsons [$level->getFolderName()])) {
 				return;
+			}
 			$this->jsons [$level->getFolderName()] = (new Config ($filePath, Config::JSON, [
 				"rentIndex" => 0
 			]))->getAll();
 			return;
 		}
 		foreach (Server::getInstance()->getLevels() as $level) {
-			if (!$level instanceof Level)
+			if (!$level instanceof Level) {
 				continue;
+			}
 			$filePath = Server::getInstance()->getDataPath() . "worlds/" . $level->getFolderName() . "/rents.json";
-			if (isset ($this->jsons [$level->getFolderName()]))
+			if (isset ($this->jsons [$level->getFolderName()])) {
 				continue;
+			}
 			$this->jsons [$level->getFolderName()] = (new Config ($filePath, Config::JSON, [
 				"rentIndex" => 0
 			]))->getAll();
@@ -56,14 +61,18 @@ class RentLoader
 	 * @return NULL|RentSection
 	 */
 	public function getRent($level, $x, $y, $z) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (!isset ($this->jsons [$level]))
+		}
+		if (!isset ($this->jsons [$level])) {
 			return null;
+		}
 		foreach ($this->jsons [$level] as $id => $rent)
-			if (isset ($rent ["startX"]))
-				if ($rent ["startX"] <= $x and $rent ["endX"] >= $x and $rent ["startY"] <= $y and $rent ["endY"] >= $y and $rent ["startZ"] <= $z and $rent ["endZ"] >= $z)
+			if (isset ($rent ["startX"])) {
+				if ($rent ["startX"] <= $x and $rent ["endX"] >= $x and $rent ["startY"] <= $y and $rent ["endY"] >= $y and $rent ["startZ"] <= $z and $rent ["endZ"] >= $z) {
 					return $this->getRentSection($level, $rent ["rentId"]);
+				}
+			}
 		return null;
 	}
 
@@ -79,12 +88,15 @@ class RentLoader
 	 * @return NULL|RentSection
 	 */
 	public function checkOverlap($level, $startX, $endX, $startY, $endY, $startZ, $endZ) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		foreach ($this->jsons [$level] as $id => $rent)
-			if (isset ($rent ["startX"]))
-				if ((($rent ["startX"] <= $startX and $rent ["endX"] >= $startX) or ($rent ["startX"] <= $endX and $rent ["endX"] >= $endX)) and (($rent ["startY"] <= $startY and $rent ["endY"] >= $startY) or ($rent ["startY"] <= $endY and $rent ["endY"] >= $endY)) and (($rent ["startZ"] <= $startZ and $rent ["endZ"] >= $startZ) or ($rent ["endZ"] <= $endZ and $rent ["endZ"] >= $endZ)))
+			if (isset ($rent ["startX"])) {
+				if ((($rent ["startX"] <= $startX and $rent ["endX"] >= $startX) or ($rent ["startX"] <= $endX and $rent ["endX"] >= $endX)) and (($rent ["startY"] <= $startY and $rent ["endY"] >= $startY) or ($rent ["startY"] <= $endY and $rent ["endY"] >= $endY)) and (($rent ["startZ"] <= $startZ and $rent ["endZ"] >= $startZ) or ($rent ["endZ"] <= $endZ and $rent ["endZ"] >= $endZ))) {
 					return $this->getRentSection($level, $rent ["rentId"]);
+				}
+			}
 		return null;
 	}
 
@@ -95,8 +107,9 @@ class RentLoader
 	 * @return NULL|Array
 	 */
 	public function getAll($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->jsons [$level])) {
 			return $this->jsons [$level];
 		} else {
@@ -111,17 +124,20 @@ class RentLoader
 	 * @return NULL|Array
 	 */
 	public function getRentsInfo($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (!isset ($this->jsons [$level]))
+		}
+		if (!isset ($this->jsons [$level])) {
 			return null;
+		}
 		$info = [
 			"userRent" => 0,
 			"buyableRent" => 0
 		];
 		foreach ($this->jsons [$level] as $id => $rent) {
-			if (!isset ($rent ["owner"]))
+			if (!isset ($rent ["owner"])) {
 				continue;
+			}
 			if ($rent ["owner"] == "") {
 				++$info ["buyableRent"];
 			} else {
@@ -138,8 +154,9 @@ class RentLoader
 	 * @return NULL|Array
 	 */
 	public function get($level, $key) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->jsons [$level] [$key])) {
 			return $this->jsons [$level] [$key];
 		} else {
@@ -154,14 +171,16 @@ class RentLoader
 	 * @return RentSection|NULL
 	 */
 	public function getRentSection($level, $id) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->rents [$level] [$id])) {
 			return $this->rents [$level] [$id];
 		} else {
 
-			if (!isset ($this->jsons [$level] [$id]))
+			if (!isset ($this->jsons [$level] [$id])) {
 				return null;
+			}
 
 			$rentSection = new RentSection ($this->jsons [$level] [$id], $level);
 
@@ -183,12 +202,14 @@ class RentLoader
 	 * @return NULL|RentSection
 	 */
 	public function addRentSection($level, array $data) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 
 		$isOverlap = $this->checkOverlap($level, $data ["startX"], $data ["endX"], $data ["startY"], $data ["endY"], $data ["startZ"], $data ["endZ"]);
-		if ($isOverlap !== null)
+		if ($isOverlap !== null) {
 			return null;
+		}
 
 		$data ["rentId"] = $this->jsons [$level] ["rentIndex"]++;
 		$this->jsons [$level] [$data ["rentId"]] = $data;
@@ -204,12 +225,15 @@ class RentLoader
 	}
 
 	public function deleteRentSection($level, $id) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->rents [$level] [$id]))
+		}
+		if (isset ($this->rents [$level] [$id])) {
 			unset ($this->rents [$level] [$id]);
-		if (isset ($this->jsons [$level] [$id]))
+		}
+		if (isset ($this->jsons [$level] [$id])) {
 			unset ($this->jsons [$level] [$id]);
+		}
 	}
 
 	/**
@@ -218,10 +242,12 @@ class RentLoader
 	 * @param string $level
 	 */
 	public function getLevelData($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->jsons [$level]))
+		}
+		if (isset ($this->jsons [$level])) {
 			return $this->jsons [$level];
+		}
 		return null;
 	}
 

@@ -12,8 +12,9 @@ class WhiteWorldProvider
 	private $whiteWorldLoader;
 
 	public function __construct() {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->whiteWorldLoader = new WhiteWorldLoader ();
 	}
 
@@ -33,8 +34,9 @@ class WhiteWorldProvider
 	 * @param string $bool
 	 */
 	public function save($bool = false) {
-		if ($this->whiteWorldLoader instanceof WhiteWorldLoader)
+		if ($this->whiteWorldLoader instanceof WhiteWorldLoader) {
 			$this->whiteWorldLoader->save($bool);
+		}
 	}
 
 	/**

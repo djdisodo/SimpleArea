@@ -16,8 +16,9 @@ class CheckAreaEventTask extends Task
 	}
 
 	public function onRun(int $currentTick) {
-		if (!$this->event->isCancelled())
+		if (!$this->event->isCancelled()) {
 			$this->owner->applyAreaEvent($this->event);
+		}
 	}
 }
 

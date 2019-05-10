@@ -53,8 +53,9 @@ class UserProperties implements Listener
 	private $rentSaleList = [];
 
 	public function __construct() {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->server = Server::getInstance();
 		$this->areaProvider = AreaProvider::getInstance();
 		$this->rentProvider = RentProvider::getInstance();
@@ -70,23 +71,26 @@ class UserProperties implements Listener
 	public function init($levelName = null) {
 		if ($levelName !== null) {
 			$level = $this->server->getLevelByName($levelName);
-			if (!$level instanceof Level)
+			if (!$level instanceof Level) {
 				return;
+			}
 			$areas = $this->areaProvider->getAll($level->getFolderName());
 			foreach ($areas as $area) {
 				if (isset ($area ["resident"]) and count($area ["resident"]) == 0) {
 					$this->addSaleList($level->getFolderName(), $area ["id"]);
 					continue;
 				}
-				if (!isset ($area ["resident"]) or !isset ($area ["id"]) or !is_array($area ["resident"]))
+				if (!isset ($area ["resident"]) or !isset ($area ["id"]) or !is_array($area ["resident"])) {
 					continue;
+				}
 				foreach ($area ["resident"] as $resident => $bool)
 					$this->addUserProperties($resident, $level->getFolderName(), $area ["id"]);
 			}
 			$rents = $this->rentProvider->getAll($level->getFolderName());
 			foreach ($rents as $rent) {
-				if (!isset ($rent ["owner"]))
+				if (!isset ($rent ["owner"])) {
 					continue;
+				}
 				if ($rent ["owner"] == "") {
 					$this->addRentSaleList($level->getFolderName(), $rent ["rentId"]);
 					continue;
@@ -103,20 +107,23 @@ class UserProperties implements Listener
 						$this->addSaleList($level->getFolderName(), $area ["id"]);
 						continue;
 					}
-					if (!isset ($area ["resident"]) or !isset ($area ["id"]) or !is_array($area ["resident"]))
+					if (!isset ($area ["resident"]) or !isset ($area ["id"]) or !is_array($area ["resident"])) {
 						continue;
+					}
 					if ($whiteWorld->isCountShareArea()) {
 						foreach ($area ["resident"] as $resident => $bool)
 							$this->addUserProperties($resident, $level->getFolderName(), $area ["id"]);
 					} else {
-						if ($area ["owner"] != "")
+						if ($area ["owner"] != "") {
 							$this->addUserProperties($area ["owner"], $level->getFolderName(), $area ["id"]);
+						}
 					}
 				}
 				$rents = $this->rentProvider->getAll($level->getFolderName());
 				foreach ($rents as $rent) {
-					if (!isset ($rent ["owner"]))
+					if (!isset ($rent ["owner"])) {
 						continue;
+					}
 					if ($rent ["owner"] == "") {
 						$this->addRentSaleList($level->getFolderName(), $rent ["rentId"]);
 						continue;
@@ -134,10 +141,12 @@ class UserProperties implements Listener
 	 * @param int $areaId
 	 */
 	public function addUserProperties($username, $level, $areaId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if ($username instanceof Player)
+		}
+		if ($username instanceof Player) {
 			$username = $username->getName();
+		}
 		$username = strtolower($username);
 		$this->properties [$username] [$level] [$areaId] = true;
 	}
@@ -150,10 +159,12 @@ class UserProperties implements Listener
 	 * @param int $rentId
 	 */
 	public function addUserRentProperties($username, $level, $rentId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if ($username instanceof Player)
+		}
+		if ($username instanceof Player) {
 			$username = $username->getName();
+		}
 		$username = strtolower($username);
 		$this->rentProperties [$username] [$level] [$rentId] = true;
 	}
@@ -165,8 +176,9 @@ class UserProperties implements Listener
 	 * @param int $areaId
 	 */
 	public function addSaleList($level, $areaId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		$this->saleList [$level] [$areaId] = true;
 	}
 
@@ -177,8 +189,9 @@ class UserProperties implements Listener
 	 * @param int $areaId
 	 */
 	public function addRentSaleList($level, $areaId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		$this->rentSaleList [$level] [$areaId] = true;
 	}
 
@@ -190,13 +203,16 @@ class UserProperties implements Listener
 	 * @param int $areaId
 	 */
 	public function deleteUserProperties($username, $level, $areaId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if ($username instanceof Player)
+		}
+		if ($username instanceof Player) {
 			$username = $username->getName();
+		}
 		$username = strtolower($username);
-		if (isset ($this->properties [$username] [$level] [$areaId]))
+		if (isset ($this->properties [$username] [$level] [$areaId])) {
 			unset ($this->properties [$username] [$level] [$areaId]);
+		}
 	}
 
 	/**
@@ -207,13 +223,16 @@ class UserProperties implements Listener
 	 * @param int $rentId
 	 */
 	public function deleteUserRentProperties($username, $level, $rentId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if ($username instanceof Player)
+		}
+		if ($username instanceof Player) {
 			$username = $username->getName();
+		}
 		$username = strtolower($username);
-		if (isset ($this->rentProperties [$username] [$level] [$rentId]))
+		if (isset ($this->rentProperties [$username] [$level] [$rentId])) {
 			unset ($this->rentProperties [$username] [$level] [$rentId]);
+		}
 	}
 
 	/**
@@ -223,10 +242,12 @@ class UserProperties implements Listener
 	 * @param int $areaId
 	 */
 	public function deleteSaleList($level, $areaId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->saleList [$level] [$areaId]))
+		}
+		if (isset ($this->saleList [$level] [$areaId])) {
 			unset ($this->saleList [$level] [$areaId]);
+		}
 	}
 
 	/**
@@ -236,10 +257,12 @@ class UserProperties implements Listener
 	 * @param int $rentId
 	 */
 	public function deleteRentSaleList($level, $rentId) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->rentSaleList [$level] [$rentId]))
+		}
+		if (isset ($this->rentSaleList [$level] [$rentId])) {
 			unset ($this->rentSaleList [$level] [$rentId]);
+		}
 	}
 
 	/**
@@ -250,13 +273,16 @@ class UserProperties implements Listener
 	 * @return array
 	 */
 	public function getUserProperties($username, $level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if ($username instanceof Player)
+		}
+		if ($username instanceof Player) {
 			$username = $username->getName();
+		}
 		$username = strtolower($username);
-		if (isset ($this->properties [$username] [$level]))
+		if (isset ($this->properties [$username] [$level])) {
 			return $this->properties [$username] [$level];
+		}
 		return [];
 	}
 
@@ -268,13 +294,16 @@ class UserProperties implements Listener
 	 * @return array
 	 */
 	public function getUserRentProperties($username, $level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if ($username instanceof Player)
+		}
+		if ($username instanceof Player) {
 			$username = $username->getName();
+		}
 		$username = strtolower($username);
-		if (isset ($this->rentProperties [$username] [$level]))
+		if (isset ($this->rentProperties [$username] [$level])) {
 			return $this->rentProperties [$username] [$level];
+		}
 		return [];
 	}
 
@@ -285,10 +314,12 @@ class UserProperties implements Listener
 	 * @return array
 	 */
 	public function getSaleList($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->saleList [$level]))
+		}
+		if (isset ($this->saleList [$level])) {
 			return $this->saleList [$level];
+		}
 		return [];
 	}
 
@@ -299,10 +330,12 @@ class UserProperties implements Listener
 	 * @return array
 	 */
 	public function getRentSaleList($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->rentSaleList [$level]))
+		}
+		if (isset ($this->rentSaleList [$level])) {
 			return $this->rentSaleList [$level];
+		}
 		return [];
 	}
 
@@ -317,10 +350,12 @@ class UserProperties implements Listener
 				$area = $event->getAreaData();
 				$whiteWorld = $event->getWhtieWorldData();
 
-				if (!$area instanceof AreaSection)
+				if (!$area instanceof AreaSection) {
 					return;
-				if (!$whiteWorld instanceof WhiteWorldData)
+				}
+				if (!$whiteWorld instanceof WhiteWorldData) {
 					return;
+				}
 
 				$residents = $area->getResident();
 				if (count($residents) == 0) {
@@ -331,18 +366,21 @@ class UserProperties implements Listener
 					foreach ($residents as $resident => $bool)
 						$this->addUserProperties($resident, $area->getLevel(), $area->getId());
 				} else {
-					if ($area->getOwner() != "")
+					if ($area->getOwner() != "") {
 						$this->addUserProperties($area->getOwner(), $area->getLevel(), $area->getId());
+					}
 				}
 				break;
 			case $event instanceof AreaDeleteEvent :
 				$whiteWorld = $event->getWhiteWorldData();
 				$area = $event->getAreaData();
 
-				if (!$area instanceof AreaSection)
+				if (!$area instanceof AreaSection) {
 					return;
-				if (!$whiteWorld instanceof WhiteWorldData)
+				}
+				if (!$whiteWorld instanceof WhiteWorldData) {
 					return;
+				}
 
 				$residents = $event->getResident();
 				$this->deleteSaleList($event->getLevel(), $event->getAreaId());
@@ -351,19 +389,22 @@ class UserProperties implements Listener
 					foreach ($residents as $resident => $bool)
 						$this->addUserProperties($resident, $event->getLevel(), $event->getAreaId());
 				} else {
-					if ($area->getOwner() != "")
+					if ($area->getOwner() != "") {
 						$this->addUserProperties($area->getOwner(), $event->getLevel(), $event->getAreaId());
+					}
 				}
 				break;
 			case $event instanceof AreaResidentEvent :
 				$area = $event->getAreaData();
-				if (!$area instanceof AreaSection)
+				if (!$area instanceof AreaSection) {
 					return;
+				}
 				if (count($event->getAdded()) == 0) {
 					$residents = $area->getResident();
 					foreach ($event->getDeleted() as $player)
-						if (isset ($residents [$player]))
+						if (isset ($residents [$player])) {
 							unset ($residents [$player]);
+						}
 					if (count($residents) == 0) {
 						$this->addSaleList($area->getLevel(), $area->getId());
 					} else {
@@ -401,8 +442,9 @@ class UserProperties implements Listener
 		switch (true) {
 			case $event instanceof RentAddEvent :
 				$rent = $event->getRentData();
-				if (!$rent instanceof RentSection)
+				if (!$rent instanceof RentSection) {
 					return;
+				}
 
 				$owner = $rent->getOwner();
 				if ($owner == "") {
@@ -413,24 +455,27 @@ class UserProperties implements Listener
 				break;
 			case $event instanceof RentDeleteEvent :
 				$rent = $event->getRentData();
-				if (!$rent instanceof RentSection)
+				if (!$rent instanceof RentSection) {
 					return;
+				}
 
 				$this->deleteRentSaleList($rent->getLevel(), $rent->getRentId());
 				$this->deleteUserRentProperties($rent->getOwner(), $rent->getLevel(), $rent->getRentId());
 				break;
 			case $event instanceof RentBuyEvent :
 				$rent = $event->getRentData();
-				if (!$rent instanceof RentSection)
+				if (!$rent instanceof RentSection) {
 					return;
+				}
 
 				$this->deleteRentSaleList($rent->getLevel(), $rent->getRentId());
 				$this->addUserRentProperties($rent->getOwner(), $rent->getLevel(), $rent->getRentId());
 				break;
 			case $event instanceof RentOutEvent :
 				$rent = $event->getRentData();
-				if (!$rent instanceof RentSection)
+				if (!$rent instanceof RentSection) {
 					return;
+				}
 
 				$this->addRentSaleList($rent->getLevel(), $rent->getRentId());
 				$this->deleteUserRentProperties($rent->getOwner(), $rent->getLevel(), $rent->getRentId());

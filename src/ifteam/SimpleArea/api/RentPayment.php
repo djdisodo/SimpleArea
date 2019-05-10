@@ -2,6 +2,7 @@
 
 namespace ifteam\SimpleArea\api;
 
+use onebone\economyapi\EconomyAPI;
 use pocketmine\Server;
 use ifteam\SimpleArea\SimpleArea;
 use ifteam\SimpleArea\database\rent\RentProvider;
@@ -13,7 +14,7 @@ class RentPayment
 	private $plugin;
 	/**
 	 *
-	 * @var \onebone\economyapi\EconomyAPI
+	 * @var EconomyAPI
 	 */
 	private $economy;
 	/**
@@ -37,34 +38,40 @@ class RentPayment
 	}
 
 	public function payment() {
-		if ($this->economy === null)
+		if ($this->economy === null) {
 			return;
+		}
 		foreach ($this->server->getLevels() as $level) {
 			$rents = $this->rentProvider->getAll($level);
-			if ($rents === null)
+			if ($rents === null) {
 				continue;
+			}
 			foreach ($rents as $rent) {
-				if (!isset ($rent ["rentId"]) or !isset ($rent ["rentPrice"]))
+				if (!isset ($rent ["rentId"]) or !isset ($rent ["rentPrice"])) {
 					continue;
+				}
 
-				if (!isset ($rent ["owner"]) or $rent ["owner"] === "")
+				if (!isset ($rent ["owner"]) or $rent ["owner"] === "") {
 					continue;
+				}
 
 				$money = $this->economy->myMoney($rent ["owner"]);
 				if ($money < $rent ["rentPrice"]) {
 					$rentInstance = $this->rentProvider->getRentToId($level, $rent ["rentId"]);
 
 					$player = $this->server->getPlayer($rentInstance->getOwner());
-					if ($player instanceof Player)
+					if ($player instanceof Player) {
 						$this->plugin->message($player, $area ["rentId"] . $this->plugin->get("rent-permissions-lost"));
+					}
 
 					$rentInstance->setOwner("");
 				} else {
 					$this->economy->reduceMoney($rent ["owner"], $rent ["rentPrice"]);
 
 					$player = $this->server->getPlayer($rent ["owner"]);
-					if ($player instanceof Player)
+					if ($player instanceof Player) {
 						$this->plugin->message($player, $rent ["rentId"] . $this->plugin->get("rent-tax-paid") . $rent ["rentPrice"]);
+					}
 				}
 			}
 		}

@@ -2,6 +2,7 @@
 
 namespace ifteam\SimpleArea;
 
+use pocketmine\lang\BaseLang as Language;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
 use ifteam\SimpleArea\database\area\AreaProvider;
@@ -43,12 +44,21 @@ class SimpleArea extends PluginBase implements Listener
 	private $mineFarmManager;
 	private $rentManager;
 	private $rentProvider;
+	private $language;
 
 	public $otherApi;
-	private $m_version = 8;
 	public $messages;
 
 	public function onEnable() {
+		@mkdir($this->getDataFolder() . 'lang');
+		foreach ($this->getResources() as $resource) {
+			if (substr($resource->getFilename(), -4) == '.ini') {
+				if (!file_exists($this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $resource->getFilename())) {
+					file_put_contents($this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $resource->getFilename(), file_get_contents($resource->getPathname()));
+				}
+			}
+		}
+		$this->language = new Language($this->getServer()->getLanguage()->getLang(), $this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $this->getServer()->getLanguage()->getLang() . "ini");
 		new OldSimpleAreaSupport ($this);
 
 		$this->areaProvider = new AreaProvider ();
@@ -94,24 +104,30 @@ class SimpleArea extends PluginBase implements Listener
 	}
 
 	public function onDisable() {
-		if ($this->areaProvider instanceof AreaProvider)
+		if ($this->areaProvider instanceof AreaProvider) {
 			$this->areaProvider->save();
-		if ($this->rentProvider instanceof RentProvider)
+		}
+		if ($this->rentProvider instanceof RentProvider) {
 			$this->rentProvider->save();
-		if ($this->whiteWorldProvider instanceof WhiteWorldProvider)
+		}
+		if ($this->whiteWorldProvider instanceof WhiteWorldProvider) {
 			$this->whiteWorldProvider->save();
+		}
 	}
 
 	public function autoSave() {
-		if ($this->areaProvider instanceof AreaProvider)
+		if ($this->areaProvider instanceof AreaProvider) {
 			$this->areaProvider->save(true);
-		if ($this->rentProvider instanceof RentProvider)
+		}
+		if ($this->rentProvider instanceof RentProvider) {
 			$this->rentProvider->save(true);
-		if ($this->whiteWorldProvider instanceof WhiteWorldProvider)
+		}
+		if ($this->whiteWorldProvider instanceof WhiteWorldProvider) {
 			$this->whiteWorldProvider->save(true);
+		}
 	}
 
-	public function onCommand(CommandSender $player, Command $command, string $label, Array $args): bool {
+	public function onCommand(CommandSender $player, Command $command, string $label, Array $args) : bool {
 		return $this->eventListener->onCommand($player, $command, $label, $args);
 	}
 
@@ -138,20 +154,22 @@ class SimpleArea extends PluginBase implements Listener
 		$this->messages = (new Config ($this->getDataFolder() . "messages.yml", Config::YAML))->getAll();
 	}
 
-	public function get($var) {
+	public function get($var) : string {
 		return $this->messages [$this->messages ["default-language"] . "-" . $var];
 	}
 
 
 	public function message(CommandSender $player, $text = "", $mark = null) {
-		if ($mark === null)
+		if ($mark === null) {
 			$mark = $this->get("default-prefix");
+		}
 		$player->sendMessage(TextFormat::DARK_AQUA . $mark . " " . $text);
 	}
 
 	public function alert(CommandSender $player, $text = "", $mark = null) {
-		if ($mark === null)
+		if ($mark === null) {
 			$mark = $this->get("default-prefix");
+		}
 		$player->sendMessage(TextFormat::RED . $mark . " " . $text);
 	}
 

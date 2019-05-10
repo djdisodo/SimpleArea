@@ -17,8 +17,9 @@ class AreaLoader
 	private $playerlist = [];
 
 	public function __construct() {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->server = Server::getInstance();
 
 		$this->init();
@@ -29,22 +30,26 @@ class AreaLoader
 	public function init($levelName = null) {
 		if ($levelName !== null) {
 			$level = $this->server->getLevelByName($levelName);
-			if (!$level instanceof Level)
+			if (!$level instanceof Level) {
 				return;
+			}
 			$filePath = $this->server->getDataPath() . "worlds/" . $level->getFolderName() . "/protects.json";
-			if (isset ($this->jsons [$level->getFolderName()]))
+			if (isset ($this->jsons [$level->getFolderName()])) {
 				return;
+			}
 			$this->jsons [$level->getFolderName()] = (new Config ($filePath, Config::JSON, [
 				"areaIndex" => 0
 			]))->getAll();
 			return;
 		}
 		foreach ($this->server->getLevels() as $level) {
-			if (!$level instanceof Level)
+			if (!$level instanceof Level) {
 				continue;
+			}
 			$filePath = $this->server->getDataPath() . "worlds/" . $level->getFolderName() . "/protects.json";
-			if (isset ($this->jsons [$level->getFolderName()]))
+			if (isset ($this->jsons [$level->getFolderName()])) {
 				continue;
+			}
 			$this->jsons [$level->getFolderName()] = (new Config ($filePath, Config::JSON, [
 				"areaIndex" => 0
 			]))->getAll();
@@ -53,8 +58,9 @@ class AreaLoader
 
 
 	public function getArea($level, $x, $z, $player = null) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if ($player !== null) {
 			if (isset($this->playerlist[$player])) {
 				$id = $this->playerlist[$player];
@@ -75,28 +81,35 @@ class AreaLoader
 					return $area;
 				}
 		}
-		if (!isset ($this->jsons [$level]))
+		if (!isset ($this->jsons [$level])) {
 			return null;
+		}
 		foreach ($this->jsons[$level] as $id => $area) {
-			if (isset ($area ["startX"]))
-				if ($area ["startX"] <= $x && $area ["endX"] >= $x && $area ["startZ"] <= $z && $area ["endZ"] >= $z)
+			if (isset ($area ["startX"])) {
+				if ($area ["startX"] <= $x && $area ["endX"] >= $x && $area ["startZ"] <= $z && $area ["endZ"] >= $z) {
 					return $this->getAreaSection($level, $area ["id"]);
+				}
+			}
 		}
 		return null;
 	}
 
 
 	public function checkOverlap($level, $startX, $endX, $startZ, $endZ, $pass = null) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (!isset ($this->jsons [$level]))
+		}
+		if (!isset ($this->jsons [$level])) {
 			return null;
+		}
 		foreach ($this->jsons [$level] as $id => $area) {
 			if (isset ($area ["startX"])) {
-				if ($pass !== null && $pass == $area ["id"])
+				if ($pass !== null && $pass == $area ["id"]) {
 					continue;
-				if ((($area ["startX"] <= $startX && $area ["endX"] >= $startX) || ($area ["startX"] <= $endX and $area ["endX"] >= $endX)) && (($area ["startZ"] <= $startZ && $area ["endZ"] >= $startZ) || ($area ["endZ"] <= $endZ && $area ["endZ"] >= $endZ)))
+				}
+				if ((($area ["startX"] <= $startX && $area ["endX"] >= $startX) || ($area ["startX"] <= $endX and $area ["endX"] >= $endX)) && (($area ["startZ"] <= $startZ && $area ["endZ"] >= $startZ) || ($area ["endZ"] <= $endZ && $area ["endZ"] >= $endZ))) {
 					return $this->getAreaSection($level, $area ["id"]);
+				}
 			}
 		}
 		return null;
@@ -104,8 +117,9 @@ class AreaLoader
 
 
 	public function getAll($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->jsons [$level])) {
 			return $this->jsons [$level];
 		} else {
@@ -115,18 +129,21 @@ class AreaLoader
 
 
 	public function getAreasInfo($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (!isset ($this->jsons [$level]))
+		}
+		if (!isset ($this->jsons [$level])) {
 			return null;
+		}
 		$info = [
 			"userArea" => 0,
 			"buyableArea" => 0,
 			"adminArea" => 0
 		];
 		foreach ($this->jsons [$level] as $id => $area) {
-			if (!isset ($area ["isHome"]))
+			if (!isset ($area ["isHome"])) {
 				continue;
+			}
 			if ($area ["isHome"]) {
 				if ($area ["owner"] == "") {
 					++$info ["buyableArea"];
@@ -142,8 +159,9 @@ class AreaLoader
 
 
 	public function get($level, $key) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->jsons [$level] [$key])) {
 			return $this->jsons [$level] [$key];
 		} else {
@@ -153,14 +171,16 @@ class AreaLoader
 
 
 	public function getAreaSection($level, $id) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 		if (isset ($this->areas [$level] [$id])) {
 			return $this->areas [$level] [$id];
 		} else {
 
-			if (!isset ($this->jsons [$level] [$id]))
+			if (!isset ($this->jsons [$level] [$id])) {
 				return null;
+			}
 
 			$areaSection = new AreaSection ($this->jsons [$level] [$id], $level);
 
@@ -176,12 +196,14 @@ class AreaLoader
 
 
 	public function addAreaSection($level, array $data) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
+		}
 
 		$isOverlap = $this->checkOverlap($level, $data ["startX"], $data ["endX"], $data ["startZ"], $data ["endZ"]);
-		if ($isOverlap !== null)
+		if ($isOverlap !== null) {
 			return null;
+		}
 
 		$data ["id"] = $this->jsons [$level] ["areaIndex"]++;
 		$this->jsons [$level] [$data ["id"]] = $data;
@@ -198,20 +220,25 @@ class AreaLoader
 
 
 	public function deleteAreaSection($level, $id) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->areas [$level] [$id]))
+		}
+		if (isset ($this->areas [$level] [$id])) {
 			unset ($this->areas [$level] [$id]);
-		if (isset ($this->jsons [$level] [$id]))
+		}
+		if (isset ($this->jsons [$level] [$id])) {
 			unset ($this->jsons [$level] [$id]);
+		}
 	}
 
 
 	public function getLevelData($level) {
-		if ($level instanceof Level)
+		if ($level instanceof Level) {
 			$level = $level->getFolderName();
-		if (isset ($this->jsons [$level]))
+		}
+		if (isset ($this->jsons [$level])) {
 			return $this->jsons [$level];
+		}
 		return null;
 	}
 

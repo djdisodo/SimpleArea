@@ -22,14 +22,18 @@ class OldSimpleAreaSupport
 
 		if (file_exists($this->plugin->getDataFolder() . "settings.yml")) {
 			$settings = (new Config ($this->plugin->getDataFolder() . "settings.yml", Config::YAML))->getAll();
-			if (isset ($settings ["economy-home-price"]))
+			if (isset ($settings ["economy-home-price"])) {
 				$data ["economy-home-price"] = $settings ["economy-home-price"];
-			if (isset ($settings ["maximum-home-limit"]))
+			}
+			if (isset ($settings ["maximum-home-limit"])) {
 				$data ["maximum-home-limit"] = $settings ["maximum-home-limit"];
-			if (isset ($settings ["default-home-size"]))
+			}
+			if (isset ($settings ["default-home-size"])) {
 				$data ["default-home-size"] = $settings ["default-home-size"];
-			if (isset ($settings ["enable-setarea"]))
+			}
+			if (isset ($settings ["enable-setarea"])) {
 				$data ["enable-setarea"] = $settings ["enable-setarea"];
+			}
 		}
 
 		$levels = [];
@@ -41,22 +45,30 @@ class OldSimpleAreaSupport
 			$jsonLink = $this->server->getDataPath() . "worlds/{$levelName}/options.json";
 			if (file_exists($link) and !file_exists($jsonLink)) {
 				$options = (new Config ($link, Config::YAML))->getAll();
-				if (!isset ($options ["white-protect"]))
+				if (!isset ($options ["white-protect"])) {
 					$options ["white-protect"] = true;
-				if (!isset ($options ["white-allow-option"]))
+				}
+				if (!isset ($options ["white-allow-option"])) {
 					$options ["white-allow-option"] = [];
-				if (!isset ($options ["white-forbid-option"]))
+				}
+				if (!isset ($options ["white-forbid-option"])) {
 					$options ["white-forbid-option"] = [];
-				if (!isset ($data ["economy-home-price"]))
+				}
+				if (!isset ($data ["economy-home-price"])) {
 					$data ["economy-home-price"] = 5000;
-				if (!isset ($options ["white-welcome"]))
+				}
+				if (!isset ($options ["white-welcome"])) {
 					$options ["white-welcome"] = "";
-				if (!isset ($options ["white-invensave"]))
+				}
+				if (!isset ($options ["white-invensave"])) {
 					$options ["white-invensave"] = true;
-				if (!isset ($options ["enable-setarea"]))
+				}
+				if (!isset ($options ["enable-setarea"])) {
 					$options ["enable-setarea"] = true;
-				if (!isset ($data ["maximum-home-limit"]))
+				}
+				if (!isset ($data ["maximum-home-limit"])) {
 					$data ["maximum-home-limit"] = 5;
+				}
 				(new Config ($jsonLink, Config::JSON, [
 					"protect" => $options ["white-protect"],
 					"allowOption" => $options ["white-allow-option"],
@@ -89,11 +101,13 @@ class OldSimpleAreaSupport
 				];
 
 				foreach ($protects as $index => $protect) {
-					if (!isset ($protect ["ID"]))
+					if (!isset ($protect ["ID"])) {
 						continue;
+					}
 
-					if ($convertedData ["areaIndex"] < $protect ["ID"])
+					if ($convertedData ["areaIndex"] < $protect ["ID"]) {
 						$convertedData ["areaIndex"] = $protect ["ID"];
+					}
 
 					$residents = $protect ["resident"];
 
@@ -108,28 +122,39 @@ class OldSimpleAreaSupport
 						$residents = $t_residents;
 					}
 
-					if (!isset ($protect ["startX"]))
+					if (!isset ($protect ["startX"])) {
 						continue;
-					if (!isset ($protect ["endX"]))
+					}
+					if (!isset ($protect ["endX"])) {
 						continue;
-					if (!isset ($protect ["startZ"]))
+					}
+					if (!isset ($protect ["startZ"])) {
 						continue;
-					if (!isset ($protect ["endZ"]))
+					}
+					if (!isset ($protect ["endZ"])) {
 						continue;
-					if (!isset ($protect ["protect"]))
+					}
+					if (!isset ($protect ["protect"])) {
 						$protect ["protect"] = true;
-					if (!isset ($protect ["allow-option"]))
+					}
+					if (!isset ($protect ["allow-option"])) {
 						$protect ["allow-option"] = [];
-					if (!isset ($protect ["forbid-option"]))
+					}
+					if (!isset ($protect ["forbid-option"])) {
 						$protect ["forbid-option"] = [];
-					if (!isset ($data ["economy-home-price"]))
+					}
+					if (!isset ($data ["economy-home-price"])) {
 						$data ["economy-home-price"] = 5000;
-					if (!isset ($protect ["welcome"]))
+					}
+					if (!isset ($protect ["welcome"])) {
 						$protect ["welcome"] = "";
-					if (!isset ($protect ["pvp-allow"]))
+					}
+					if (!isset ($protect ["pvp-allow"])) {
 						$protect ["pvp-allow"] = true;
-					if (!isset ($protect ["invensave"]))
+					}
+					if (!isset ($protect ["invensave"])) {
 						$protect ["invensave"] = true;
+					}
 
 					$convertedData [$protect ["ID"]] = [
 						"id" => $protect ["ID"],

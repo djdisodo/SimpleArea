@@ -4,6 +4,7 @@ namespace ifteam\SimpleArea\database\rent;
 
 use ifteam\SimpleArea\SimpleArea;
 use ifteam\SimpleArea\database\user\UserProperties;
+use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\math\Vector3;
 use pocketmine\block\Block;
@@ -21,7 +22,7 @@ class RentManager
 	private $rentProvider;
 	/**
 	 *
-	 * @var \onebone\economyapi\EconomyAPI
+	 * @var EconomyAPI
 	 */
 	private $economy;
 	/**
@@ -31,8 +32,9 @@ class RentManager
 	private $properties;
 
 	public function __construct(SimpleArea $plugin) {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->plugin = $plugin;
 		$this->rentProvider = RentProvider::getInstance();
 		$this->properties = UserProperties::getInstance();
@@ -135,8 +137,9 @@ class RentManager
 		$indexKey = array_keys($target);
 		$fullIndex = floor($indexCount / $oncePrint);
 
-		if ($indexCount > $fullIndex * $oncePrint)
+		if ($indexCount > $fullIndex * $oncePrint) {
 			$fullIndex++;
+		}
 
 		if ($index > $fullIndex) {
 			$this->message($player, $this->get("there-is-no-list"));
@@ -147,8 +150,9 @@ class RentManager
 		$message = null;
 		for ($forI = $oncePrint; $forI >= 1; $forI--) {
 			$nowIndex = $index * $oncePrint - $forI;
-			if (!isset ($indexKey [$nowIndex]))
+			if (!isset ($indexKey [$nowIndex])) {
 				break;
+			}
 			$nowKey = $indexKey [$nowIndex];
 			$message .= TextFormat::DARK_AQUA . "[" . $nowKey . $this->get("arealist-name") . "] ";
 		}

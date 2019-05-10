@@ -18,8 +18,9 @@ class WhiteWorldManager
 	private $whiteWorldProvider;
 
 	public function __construct(SimpleArea $plugin) {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->plugin = $plugin;
 		$this->whiteWorldProvider = WhiteWorldProvider::getInstance();
 	}

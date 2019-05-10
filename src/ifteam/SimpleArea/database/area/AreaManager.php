@@ -3,6 +3,7 @@
 namespace ifteam\SimpleArea\database\area;
 
 use ifteam\SimpleArea\SimpleArea;
+use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use ifteam\SimpleArea\database\user\UserProperties;
 use ifteam\SimpleArea\database\world\WhiteWorldProvider;
@@ -28,7 +29,7 @@ class AreaManager
 	private $whiteWorldProvider;
 	/**
 	 *
-	 * @var \onebone\economyapi\EconomyAPI
+	 * @var EconomyAPI
 	 */
 	private $economy;
 	/**
@@ -38,8 +39,9 @@ class AreaManager
 	private $properties;
 
 	public function __construct(SimpleArea $plugin) {
-		if (self::$instance == null)
+		if (self::$instance == null) {
 			self::$instance = $this;
+		}
 		$this->plugin = $plugin;
 		$this->areaProvider = AreaProvider::getInstance();
 		$this->whiteWorldProvider = WhiteWorldProvider::getInstance();
@@ -279,8 +281,9 @@ class AreaManager
 		$zSize = $area->get("endZ") - $area->get("startZ");
 		($area->isProtected()) ? $bool = $this->get("yes") : $bool = $this->get("no");
 		$this->message($player, $this->get("areasize") . " : " . "{$xSize}x{$zSize} ," . $this->get("isprotected") . " : " . $bool);
-		if ($area->getWelcome() != null)
+		if ($area->getWelcome() != null) {
 			$this->message($player, $this->get("welcome-prefix") . " " . $area->getWelcome());
+		}
 		$this->message($player, $this->get("owner") . " : " . "<" . $area->getOwner() . ">");
 		$sharedString = "";
 		foreach ($area->getResident() as $resident => $bool)
@@ -376,8 +379,9 @@ class AreaManager
 		$indexKey = array_keys($target);
 		$fullIndex = floor($indexCount / $oncePrint);
 
-		if ($indexCount > $fullIndex * $oncePrint)
+		if ($indexCount > $fullIndex * $oncePrint) {
 			$fullIndex++;
+		}
 
 		if ($index > $fullIndex) {
 			$this->message($player, $this->get("there-is-no-list"));
@@ -388,8 +392,9 @@ class AreaManager
 		$message = null;
 		for ($forI = $oncePrint; $forI >= 1; $forI--) {
 			$nowIndex = $index * $oncePrint - $forI;
-			if (!isset ($indexKey [$nowIndex]))
+			if (!isset ($indexKey [$nowIndex])) {
 				break;
+			}
 			$nowKey = $indexKey [$nowIndex];
 			$message .= TextFormat::DARK_AQUA . "[" . $nowKey . $this->get("arealist-name") . "] ";
 		}
@@ -730,8 +735,9 @@ class AreaManager
 		}
 
 		$getArea = $this->areaProvider->checkOverlap($pos->getLevel(), $startX + 1, ($endX - 1), $startZ + 1, ($endZ - 1));
-		if ($getArea instanceof AreaSection)
+		if ($getArea instanceof AreaSection) {
 			$getArea->deleteArea();
+		}
 
 		$defaultFenceData = WhiteWorldProvider::getInstance()->get($pos->getLevel())->getDefaultFenceType();
 		$fenceId = $defaultFenceData [0];
@@ -744,10 +750,11 @@ class AreaManager
 
 		$blockPos = new Vector3 ($pos->x, $defaultY, $pos->z);
 
-		if ($level->getBlockIdAt($startX, ($defaultY - 2), $startZ) == Block::AIR)
+		if ($level->getBlockIdAt($startX, ($defaultY - 2), $startZ) == Block::AIR) {
 			for ($x = $startX; $x <= $endX; $x++)
 				for ($z = $startZ; $z <= $endZ; $z++)
 					$level->setBlock($blockPos->setComponents($x, $defaultY - 1, $z), $airBlock);
+		}
 
 		$this->setSideFence($level, $defaultY, $startX, $startX, $startZ, $endZ, 2, $airBlock); // UP
 		$this->setSideFence($level, $defaultY, $endX, $endX, $startZ, $endZ, 2, $airBlock); // DOWN

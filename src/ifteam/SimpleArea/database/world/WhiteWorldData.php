@@ -11,48 +11,66 @@ class WhiteWorldData
 	private $level;
 
 	public function __construct(array &$data, $level) {
-		if (!isset ($data ["protect"]))
+		if (!isset ($data ["protect"])) {
 			$data ["protect"] = true;
-		if (!isset ($data ["defaultAreaPrice"]))
+		}
+		if (!isset ($data ["defaultAreaPrice"])) {
 			$data ["defaultAreaPrice"] = 5000;
-		if (!isset ($data ["areaTax"]))
+		}
+		if (!isset ($data ["areaTax"])) {
 			$data ["areaTax"] = 0;
-		if (!isset ($data ["pricePerBlock"]))
+		}
+		if (!isset ($data ["pricePerBlock"])) {
 			$data ["pricePerBlock"] = 10;
-		if (!isset ($data ["welcome"]))
+		}
+		if (!isset ($data ["welcome"])) {
 			$data ["welcome"] = "";
-		if (!isset ($data ["pvpAllow"]))
+		}
+		if (!isset ($data ["pvpAllow"])) {
 			$data ["pvpAllow"] = true;
-		if (!isset ($data ["invenSave"]))
+		}
+		if (!isset ($data ["invenSave"])) {
 			$data ["invenSave"] = true;
-		if (!isset ($data ["autoCreateAllow"]))
+		}
+		if (!isset ($data ["autoCreateAllow"])) {
 			$data ["autoCreateAllow"] = true;
-		if (!isset ($data ["manualCreateAllow"]))
+		}
+		if (!isset ($data ["manualCreateAllow"])) {
 			$data ["manualCreateAllow"] = true;
-		if (!isset ($data ["areaHoldLimit"]))
+		}
+		if (!isset ($data ["areaHoldLimit"])) {
 			$data ["areaHoldLimit"] = true;
-		if (!isset ($data ["defaultAreaSize"]))
+		}
+		if (!isset ($data ["defaultAreaSize"])) {
 			$data ["defaultAreaSize"] = [
 				32,
 				22
 			];
-		if (!isset ($data ["defaultFenceType"]))
+		}
+		if (!isset ($data ["defaultFenceType"])) {
 			$data ["defaultFenceType"] = [
 				139,
 				1
 			];
-		if (!isset ($data ["isAllowAccessDeny"]))
+		}
+		if (!isset ($data ["isAllowAccessDeny"])) {
 			$data ["isAllowAccessDeny"] = true;
-		if (!isset ($data ["isAllowAreaSizeUp"]))
+		}
+		if (!isset ($data ["isAllowAreaSizeUp"])) {
 			$data ["isAllowAreaSizeUp"] = false;
-		if (!isset ($data ["isAllowAreaSizeDown"]))
+		}
+		if (!isset ($data ["isAllowAreaSizeDown"])) {
 			$data ["isAllowAreaSizeDown"] = false;
-		if (!isset ($data ["isCountShareArea"]))
+		}
+		if (!isset ($data ["isCountShareArea"])) {
 			$data ["isCountShareArea"] = false;
-		if (!isset ($data ["manualCreateMaxSize"]))
+		}
+		if (!isset ($data ["manualCreateMaxSize"])) {
 			$data ["manualCreateMaxSize"] = 200;
-		if (!isset ($data ["manualCreateMinSize"]))
+		}
+		if (!isset ($data ["manualCreateMinSize"])) {
 			$data ["manualCreateMixSize"] = 20;
+		}
 
 		$this->level = $level;
 		$this->data = &$data;
@@ -146,13 +164,18 @@ class WhiteWorldData
 				return;
 			}
 			$this->data ["allowOption"] ["{$blockId}:{$blockDamage}"] = true;
-		} else if ($blockDamage === "*") {
-			for ($dmg = 0; $dmg <= 15; $dmg++)
-				if (isset ($this->data ["allowOption"] ["{$blockId}:{$dmg}"]))
-					unset ($this->data ["allowOption"] ["{$blockId}:{$dmg}"]);
-			return;
-		} else if (isset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"])) {
-			unset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"]);
+		} else {
+			if ($blockDamage === "*") {
+				for ($dmg = 0; $dmg <= 15; $dmg++)
+					if (isset ($this->data ["allowOption"] ["{$blockId}:{$dmg}"])) {
+						unset ($this->data ["allowOption"] ["{$blockId}:{$dmg}"]);
+					}
+				return;
+			} else {
+				if (isset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"])) {
+					unset ($this->data ["allowOption"] ["{$blockId}:{$blockDamage}"]);
+				}
+			}
 		}
 	}
 
@@ -164,13 +187,18 @@ class WhiteWorldData
 				return;
 			}
 			$this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"] = true;
-		} else if ($blockDamage === "*") {
-			for ($dmg = 0; $dmg <= 15; $dmg++)
-				if (isset ($this->data ["forbidOption"] ["{$blockId}:{$dmg}"]))
-					unset ($this->data ["forbidOption"] ["{$blockId}:{$dmg}"]);
-			return;
-		} else if (isset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"])) {
-			unset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"]);
+		} else {
+			if ($blockDamage === "*") {
+				for ($dmg = 0; $dmg <= 15; $dmg++)
+					if (isset ($this->data ["forbidOption"] ["{$blockId}:{$dmg}"])) {
+						unset ($this->data ["forbidOption"] ["{$blockId}:{$dmg}"]);
+					}
+				return;
+			} else {
+				if (isset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"])) {
+					unset ($this->data ["forbidOption"] ["{$blockId}:{$blockDamage}"]);
+				}
+			}
 		}
 	}
 
@@ -223,8 +251,9 @@ class WhiteWorldData
 	public function setAreaTax($price) {
 		$event = new AreaTaxChangeEvent ($this->level, $price);
 		Server::getInstance()->getPluginManager()->callEvent($event);
-		if (!$event->isCancelled())
+		if (!$event->isCancelled()) {
 			$this->data ["areaTax"] = $event->getPrice();
+		}
 	}
 
 	public function setAllowAccessDeny($bool) {

@@ -27,20 +27,26 @@ class RentSection
 			"endZ"
 		];
 		foreach ($basicElements as $element)
-			if (!isset ($data [$element]))
+			if (!isset ($data [$element])) {
 				return null;
+			}
 
-		if (!isset ($data ["welcome"]))
+		if (!isset ($data ["welcome"])) {
 			$data ["welcome"] = "";
-		if (!isset ($data ["buySignX"]))
+		}
+		if (!isset ($data ["buySignX"])) {
 			$data ["buySignX"] = null;
-		if (!isset ($data ["buySignY"]))
+		}
+		if (!isset ($data ["buySignY"])) {
 			$data ["buySignY"] = null;
-		if (!isset ($data ["buySignZ"]))
+		}
+		if (!isset ($data ["buySignZ"])) {
 			$data ["buySignZ"] = null;
+		}
 
-		if ($data ["owner"] !== "")
+		if ($data ["owner"] !== "") {
 			$data ["owner"] = strtolower($data ["owner"]);
+		}
 
 		$this->level = $level;
 		$this->data = &$data;
@@ -49,19 +55,22 @@ class RentSection
 	public function out() {
 		$event = new RentOutEvent ($this->getOwner(), $this->getLevel(), $this->getRentId());
 		Server::getInstance()->getPluginManager()->callEvent($event);
-		if (!$event->isCancelled())
+		if (!$event->isCancelled()) {
 			$this->data ["owner"] = "";
+		}
 	}
 
 	public function buy($player) {
-		if ($player instanceof Player)
+		if ($player instanceof Player) {
 			$player = $player->getName();
+		}
 		$player = strtolower($player);
 
 		$event = new RentBuyEvent ($this->getOwner(), $this->getLevel(), $this->getRentId(), $player);
 		Server::getInstance()->getPluginManager()->callEvent($event);
-		if (!$event->isCancelled())
+		if (!$event->isCancelled()) {
 			$this->setOwner($player);
+		}
 	}
 
 	/**
@@ -71,8 +80,9 @@ class RentSection
 	 * @return array
 	 */
 	public function get($key) {
-		if (!isset ($this->data [$key]))
+		if (!isset ($this->data [$key])) {
 			return null;
+		}
 		return $this->data [$key];
 	}
 
@@ -168,8 +178,9 @@ class RentSection
 	 * @return boolean
 	 */
 	public function isOwner($name) {
-		if ($name instanceof Player)
+		if ($name instanceof Player) {
 			$name = $name->getName();
+		}
 		$name = strtolower($name);
 		return $this->data ["owner"] == strtolower($name) ? true : false;
 	}
@@ -200,8 +211,9 @@ class RentSection
 	 * @param string $name
 	 */
 	public function setOwner($name) {
-		if ($name instanceof Player)
+		if ($name instanceof Player) {
 			$name = $name->getName();
+		}
 		$name = strtolower($name);
 		$this->data ["owner"] = strtolower($name);
 	}

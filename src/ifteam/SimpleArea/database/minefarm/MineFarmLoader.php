@@ -7,6 +7,7 @@ use ifteam\SimpleArea\database\area\AreaLoader;
 use ifteam\SimpleArea\database\area\AreaProvider;
 use ifteam\SimpleArea\database\user\UserProperties;
 use ifteam\SimpleArea\database\world\WhiteWorldProvider;
+use function mt_rand;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\block\Block;
@@ -65,8 +66,9 @@ class MineFarmLoader
 	}
 
 	public function addMineFarm($owner) {
-		if ($owner instanceof Player)
+		if ($owner instanceof Player) {
 			$owner = $owner->getName();
+		}
 		$owner = strtolower($owner);
 
 		$index = $this->getIndex();
@@ -94,10 +96,12 @@ class MineFarmLoader
 			for ($z = $startZ; $z <= $endZ; $z++) {
 				$chunk = $level->getChunk($x >> 4, $z >> 4, true);
 				//	if ($chunk instanceof FullChunk) {
-				if (!$chunk->isGenerated())
+				if (!$chunk->isGenerated()) {
 					$chunk->setGenerated(true);
-				if (!$chunk->isPopulated())
+				}
+				if (!$chunk->isPopulated()) {
 					$chunk->setPopulated(true);
+				}
 				//	}
 				$center->setComponents($x, 0, $z);
 				$level->setBlock($center, Block::get(Block::BEDROCK));
@@ -115,14 +119,15 @@ class MineFarmLoader
 		$center->setComponents($center->x + 4, 4, $center->z);
 
 		$level->setBlock($center, Block::get(Block::SAPLING, Sapling::OAK));
-		Tree::growTree($level, $center->x, $center->y, $center->z, new Random (\mt_rand()), Sapling::OAK & 0x07);
+		Tree::growTree($level, $center->x, $center->y, $center->z, new Random (mt_rand()), Sapling::OAK & 0x07);
 
 		return $area->getId();
 	}
 
 	public function getMineFarmList($owner) {
-		if ($owner instanceof Player)
+		if ($owner instanceof Player) {
 			$owner = $owner->getName();
+		}
 		$owner = strtolower($owner);
 		return $this->userProperties->getUserProperties($owner, "island");
 	}
